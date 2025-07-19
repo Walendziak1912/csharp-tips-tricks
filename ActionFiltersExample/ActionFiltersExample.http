@@ -1,0 +1,87 @@
+@ActionFiltersExample_HostAddress = http://localhost:5089
+
+GET {{ActionFiltersExample_HostAddress}}/weatherforecast/
+Accept: application/json
+
+### Testy Action Filtrów - UserController
+
+### 1. Pobieranie listy użytkowników (z cache i pomiarem wydajności)
+GET https://localhost:7001/api/user
+Content-Type: application/json
+
+### 2. Pobieranie użytkownika o ID (z walidacją i pomiarem wydajności)
+GET https://localhost:7001/api/user/1
+Content-Type: application/json
+
+### 3. Pobieranie użytkownika z ujemnym ID (powinno zwrócić błąd walidacji)
+GET https://localhost:7001/api/user/-1
+Content-Type: application/json
+
+### 4. Tworzenie użytkownika (z walidacją i pomiarem wydajności)
+POST https://localhost:7001/api/user
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com"
+}
+
+### 5. Tworzenie użytkownika z pustymi danymi (powinno zwrócić błąd walidacji)
+POST https://localhost:7001/api/user
+Content-Type: application/json
+
+{
+  "name": "",
+  "email": ""
+}
+
+### 6. Aktualizacja użytkownika (z walidacją i pomiarem wydajności)
+PUT https://localhost:7001/api/user/1
+Content-Type: application/json
+
+{
+  "name": "Updated User",
+  "email": "updated@example.com"
+}
+
+### 7. Usuwanie użytkownika (z walidacją i pomiarem wydajności)
+DELETE https://localhost:7001/api/user/1
+Content-Type: application/json
+
+### 8. Wolna operacja (powinna wygenerować ostrzeżenie o wydajności)
+GET https://localhost:7001/api/user/slow
+Content-Type: application/json
+
+### 9. Test cache - drugie wywołanie powinno być szybsze
+GET https://localhost:7001/api/user
+Content-Type: application/json
+
+### 10. Test WeatherForecast (bez filtrów)
+GET https://localhost:7001/WeatherForecast
+Content-Type: application/json
+
+### ========================================
+### PORÓWNANIE RÓŻNYCH TYPÓW ACTION FILTRÓW
+### ========================================
+
+### 11. ServiceFilter (IActionFilter) - zalecane
+GET https://localhost:7001/api/comparison/service-filter
+Content-Type: application/json
+
+### 12. SimpleLoggingActionFilterAttribute - bez DI
+GET https://localhost:7001/api/comparison/simple-attribute
+Content-Type: application/json
+
+### 13. AdvancedLoggingActionFilterAttribute - z ręcznym DI
+GET https://localhost:7001/api/comparison/advanced-attribute
+Content-Type: application/json
+
+### 14. Wszystkie filtry na raz - porównanie w logach
+GET https://localhost:7001/api/comparison/all-filters
+Content-Type: application/json
+
+### 15. Test z parametrami - zobacz różnice w logowaniu
+GET https://localhost:7001/api/comparison/with-params/123?name=testuser
+Content-Type: application/json
+
+###
